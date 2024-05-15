@@ -1,6 +1,6 @@
 # include <stdio.h>
 #include "munit.h"
-#include "../libft.h"
+#include "../libft/libft.h"
 
 static MunitResult
 test_isalpha(const MunitParameter params[], void* data) {
