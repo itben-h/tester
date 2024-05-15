@@ -169,9 +169,10 @@ static MunitResult
 test_strlcat(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	char dest[] = "dest";
-	char src[] = "src";
+	char dest[10] = "dest";
+	char src[10] = "src";
 
+	munit_assert_int(ft_strlcat(dest, src, 0), ==, 4);
 	ft_strlcat(dest, src, 6);
 	munit_assert_string_equal(dest, "dests");
 	ft_strlcat(dest, src, 10);
