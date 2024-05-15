@@ -21,10 +21,13 @@ lib:
 lib-b:
 	$(MAKE) -C .. bonus
 	
-test-lib: $(MUNIT)
+test-lib: $(MUNIT) lib
 	$(CC) $(CFLAGS) $(SRCS) $(LIB) -o $@$(EXT)
 	
 clean:
 	$(RM) *$(EXT)
-
+	
+fclean: clean
+	$(MAKE) -C .. fclean
+	
 .PHONY.: all test clean lib lib-b
