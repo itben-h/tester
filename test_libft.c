@@ -83,15 +83,14 @@ test_memset(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
 	char str[17] = "this is a string";
-	int n = 10;
-	int arr[n];
+	int arr[10];
 	int arr_a[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 	
 	ft_memset(str + 4, '$', 5 * sizeof(char));
-	ft_memset(arr, -1, n * sizeof(arr[0]));
+	ft_memset(arr, -1, 10 * sizeof(arr[0]));
 	
 	munit_assert_string_equal(str, "this$$$$$ string");
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < 10; i++)
 		munit_assert_int(arr[i], ==, arr_a[i]);
 	return MUNIT_OK;
 }
@@ -118,15 +117,22 @@ static MunitResult
 test_memcpy(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
+	char blank[5] = "";
+	char blank_1[5] = "";
 	char dest[50] = "Replace Me";
 	char dest_1[50] = "Replace Me";
 	char src[50] = "Get Replaced";
 	char src_1[50] = "Get Replaced";
-	char dest2[] = "foo";
-	char src2[] = "bar";
+	int arr[5] = {1, 2, 3, 4, 5};
+	int arr_1[5] = {1, 2, 3, 4, 5};
+	int arr_s[3] = {6, 7, 8};
 	
+	munit_assert_string_equal(ft_memmove(blank, blank, 3), memmove(blank_1, blank_1, 3));
 	munit_assert_string_equal(ft_memcpy(dest, src, 5), memcpy(dest_1, src_1, 5));
-	munit_assert_string_equal(ft_memcpy(dest2, src2, 3), "bar");
+	ft_memcpy(arr, arr_s, 2);
+	memcpy(arr_1, arr_s, 2);
+	for (int i = 0; i < 5; i++)
+		munit_assert_int(arr[i], ==, arr_1[i]);
 	return MUNIT_OK;
 }
 
@@ -134,19 +140,27 @@ static MunitResult
 test_memmove(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
+	char blank[5] = "";
+	char blank_1[5] = "";
 	char dest[50] = "Replace Me";
 	char dest_1[50] = "Replace Me";
 	char src[50] = "Get Replaced";
 	char src_1[50] = "Get Replaced";
-	char dest2[] = "foo";
-	char src2[] = "bar";
 	char overlap[50] = "overlap";
 	char overlap_1[50] = "overlap";
+	int arr[9] = {1, 2, 3, 4, 5};
+	int arr_1[9] = {1, 2, 3, 4, 5};
 	
+	munit_assert_string_equal(ft_memmove(blank, blank, 3), memmove(blank_1, blank_1, 3));
 	munit_assert_string_equal(ft_memmove(dest, src, 5), memmove(dest_1, src_1, 5));
-	munit_assert_string_equal(ft_memmove(dest2, src2, 3), "bar");
-	munit_assert_string_equal(ft_memmove(overlap + 4, overlap, 7), memmove(overlap_1 + 4, overlap_1, 7));
+	munit_assert_string_equal(ft_memmove(overlap + 5, overlap, 7), memmove(overlap_1 + 4, overlap_1, 7));
 	munit_logf(MUNIT_LOG_INFO, "Memmoved String is %s", overlap);
+	ft_memmove(arr + 3, arr, 4);
+	memmove(arr_1 + 3, arr, 4);
+	for (int i = 0; i < 5; i++) {
+		munit_assert_int(arr[i], ==, arr_1[i]);
+		munit_logf(MUNIT_LOG_INFO, "Memmoved element %d is %d", i, arr[i]);
+	}
 	return MUNIT_OK;
 }
 
@@ -172,7 +186,7 @@ test_strlcat(const MunitParameter params[], void* data) {
 	char dest[10] = "dest";
 	char src[10] = "src";
 
-	munit_assert_int(ft_strlcat(dest, src, 0), ==, 4);
+	munit_assert_int(ft_strlcat(dest, src, 0), ==, 3);
 	ft_strlcat(dest, src, 6);
 	munit_assert_string_equal(dest, "dests");
 	ft_strlcat(dest, src, 10);
