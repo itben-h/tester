@@ -382,7 +382,7 @@ test_strdup(const MunitParameter params[], void* data) {
 	char *s = ft_strdup("string");
 
 	munit_assert_string_equal(s, "string"); 
-	munit_assert_char(*(s + strlen(s)), ==, 0); free(s);
+	munit_assert_char(*(s + 6), ==, 0); free(s);
 	s = ft_strdup("");
 	munit_assert_string_equal(s, ""); 
 	munit_assert_char(*s, ==, 0); free(s);
