@@ -1,4 +1,5 @@
 # include <stdio.h>
+# include <limits.h>
 #include "munit.h"
 #include "../libft/libft.h"
 
@@ -235,7 +236,6 @@ test_strchr(const MunitParameter params[], void* data) {
 	munit_assert_ptr_equal(ft_strchr(s, 0), s + ft_strlen(s));
 	munit_assert_ptr_equal(ft_strchr(s, 'X'), 0);
 	munit_assert_ptr_equal(ft_strchr(s, 'B' + 256), s);
-
 	return MUNIT_OK;
 }
 
@@ -253,7 +253,6 @@ test_strrchr(const MunitParameter params[], void* data) {
 	munit_assert_ptr_equal(ft_strrchr(s, 'B' + 256), s);
 	munit_assert_ptr_equal(ft_strrchr(empty, 'B'), 0);
 	munit_assert_ptr_equal(ft_strrchr(empty, 0), empty);
-
 	return MUNIT_OK;
 }
 
@@ -269,7 +268,6 @@ test_strncmp(const MunitParameter params[], void* data) {
 	munit_assert_int(ft_strncmp("abc", "abb", 3), >, 0);
 	munit_assert_int(ft_strncmp("abC", "abc", 3), <, 0);
 	munit_assert_int(ft_strncmp("one", "two", 0), ==, 0);
-
 	return MUNIT_OK;
 }
 
@@ -287,7 +285,6 @@ test_memchr(const MunitParameter params[], void* data) {
 	munit_assert_ptr_equal(ft_memchr(arr, 0, 10), arr);
 	munit_assert_ptr_equal(ft_memchr(arr, 2, 4), arr + 2);
 	munit_assert_ptr_equal(ft_memchr(arr, 'B', 4), 0);
-
 	return MUNIT_OK;
 }
 
@@ -310,7 +307,6 @@ test_memcmp(const MunitParameter params[], void* data) {
 	munit_assert_int(ft_memcmp(s2, s3, 7), <, 0);
 	munit_assert_int(ft_memcmp(s4, s4x, 3), ==, 0);
 	munit_assert_int(ft_memcmp(s4, s4x, 6), >, 0);
-
 	return MUNIT_OK;
 }
 
@@ -330,7 +326,6 @@ test_strnstr(const MunitParameter params[], void* data) {
 	munit_assert_ptr_equal(ft_strnstr(s2, "def", 4), 0);
 	munit_assert_ptr_equal(ft_strnstr(empty, "", 3), empty);
 	munit_assert_ptr_equal(ft_strnstr(empty, "a", 3), 0);
-
 	return MUNIT_OK;
 }
 
@@ -348,7 +343,6 @@ test_atoi(const MunitParameter params[], void* data) {
 	munit_assert_int(ft_atoi("   -00012009"), ==, -12009);
 	munit_assert_int(ft_atoi("123456789"), ==, 123456789);
 	munit_assert_int(ft_atoi(s), ==, 5);
-
 	return MUNIT_OK;
 }
 
@@ -389,6 +383,76 @@ test_strdup(const MunitParameter params[], void* data) {
 	return MUNIT_OK;
 }
 
+static MunitResult
+test_substr(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	munit_assert_string_equal(ft_substr("string", 0, 6), "string");
+	munit_assert_string_equal(ft_substr("string", 3, 3), "ing");
+	munit_assert_string_equal(ft_substr("string", 4, 100), "ng");
+	munit_assert_string_equal(ft_substr("string", 6, 1), "");
+	munit_assert_string_equal(ft_substr("string", 0, 0), "");
+	munit_assert_string_equal(ft_substr("string", 101, 100), "");
+	return MUNIT_OK;
+}
+
+static MunitResult
+test_strjoin(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	munit_assert_string_equal(ft_strjoin("join", "string"), "joinstring");
+	munit_assert_string_equal(ft_strjoin("foo", ""), "foo");
+	munit_assert_string_equal(ft_strjoin("", "bar"), "bar");
+	munit_assert_string_equal(ft_strjoin("", ""), "");
+	return MUNIT_OK;
+}
+
+static MunitResult
+test_strtrim(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	munit_assert_string_equal(ft_strtrim("   XXXstring", " X"), "string");
+	munit_assert_string_equal(ft_strtrim("string xx x x xx", "x "), "string");
+	munit_assert_string_equal(ft_strtrim("x   xx xxxx xx", " x"), "");
+	munit_assert_string_equal(ft_strtrim("", "123"), "");
+	munit_assert_string_equal(ft_strtrim("123", ""), "123");
+	munit_assert_string_equal(ft_strtrim("bcadacb", "abc"), "d");
+	return MUNIT_OK;
+}
+
+static MunitResult
+test_split(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	char **arr = ft_split("   split   me   up    ", ' ');
+	munit_assert_string_equal(arr[0], "split");
+	munit_assert_string_equal(arr[1], "me");
+	munit_assert_string_equal(arr[2], "up");
+	munit_assert_null(arr[3]); free(arr);
+	arr = ft_split("1----2--3----42", '-');
+	for (int i = 0; i < 4; i++)
+		munit_assert_int(sizeof(arr[i]), ==, sizeof(char*));
+	munit_assert_string_equal(arr[3], "42"); free(arr);
+	return MUNIT_OK;
+}
+
+static MunitResult
+test_itoa(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	munit_assert_string_equal(ft_itoa(-9), "-9");
+	munit_assert_string_equal(ft_itoa(123), "123");
+	munit_assert_string_equal(ft_itoa(INT_MIN), "-2147483648");
+	munit_assert_string_equal(ft_itoa(INT_MAX), "2147483647");
+	munit_assert_string_equal(ft_itoa(0), "0");
+	return MUNIT_OK;
+}
+
 static	MunitTest test_suite_tests[] = {
 	{"/ft_isalpha", test_isalpha, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_isdigit", test_isdigit, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
@@ -413,6 +477,11 @@ static	MunitTest test_suite_tests[] = {
 	{"/ft_atoi", test_atoi, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_calloc", test_calloc, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_strdup", test_strdup, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_substr", test_substr, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_strjoin", test_strjoin, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_strtrim", test_strtrim, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_split", test_split, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_itoa", test_itoa, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
