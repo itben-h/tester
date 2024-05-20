@@ -447,9 +447,38 @@ test_itoa(const MunitParameter params[], void* data) {
 
 	munit_assert_string_equal(ft_itoa(-9), "-9");
 	munit_assert_string_equal(ft_itoa(123), "123");
+	munit_assert_string_equal(ft_itoa(100000), "100000");
 	munit_assert_string_equal(ft_itoa(INT_MIN), "-2147483648");
 	munit_assert_string_equal(ft_itoa(INT_MAX), "2147483647");
 	munit_assert_string_equal(ft_itoa(0), "0");
+	return MUNIT_OK;
+}
+
+static char addOne(unsigned int i, char c) {return (i + c);}
+static MunitResult
+test_strmapi(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	char *s = ft_strmapi("1234", addOne);
+	munit_assert_string_equal(s, "1357"); free(s);
+	s = ft_strmapi("", addOne);
+	munit_assert_string_equal(s, ""); free(s);
+	return MUNIT_OK;
+}
+
+static void iterOne(unsigned int i, char * s) {*s += i;}
+static MunitResult
+test_striteri(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	char s0[] = "0000000000"; ft_striteri(s0, iterOne);
+	munit_assert_string_equal(s0, "0123456789");
+	char s1[] = ""; ft_striteri(s1, iterOne);
+	munit_assert_string_equal(s1, "");
+	char s2[] = "a"; ft_striteri(s2, iterOne);
+	munit_assert_string_equal(s2, "a");
 	return MUNIT_OK;
 }
 
@@ -482,6 +511,8 @@ static	MunitTest test_suite_tests[] = {
 	{"/ft_strtrim", test_strtrim, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_split", test_split, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_itoa", test_itoa, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_strmapi", test_strmapi, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_striteri", test_striteri, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
