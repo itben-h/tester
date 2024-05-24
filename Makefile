@@ -15,7 +15,7 @@ lib:
 lib-b:
 	$(MAKE) -C $(LIBFT_PATH) bonus
 	
-test-lib: $(MUNIT) lib
+test-lib: $(MUNIT) lib-b
 	$(CC) $(CFLAGS) $(SRCS) $(LIB) -o $@$(EXT)
 	
 clean:

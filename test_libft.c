@@ -1,5 +1,8 @@
 # include <stdio.h>
 # include <limits.h>
+# include <string.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 #include "munit.h"
 #include "../libft/libft.h"
 
@@ -128,8 +131,9 @@ test_memcpy(const MunitParameter params[], void* data) {
 	int arr_1[5] = {1, 2, 3, 4, 5};
 	int arr_s[3] = {6, 7, 8};
 	
-	munit_assert_string_equal(ft_memmove(blank, blank, 3), memmove(blank_1, blank_1, 3));
+	munit_assert_string_equal(ft_memcpy(blank, blank, 3), memcpy(blank_1, blank_1, 3));
 	munit_assert_string_equal(ft_memcpy(dest, src, 5), memcpy(dest_1, src_1, 5));
+	//munit_assert_null(ft_memcpy(((void*)0), ((void*)0), 3));
 	ft_memcpy(arr, arr_s, 2);
 	memcpy(arr_1, arr_s, 2);
 	for (int i = 0; i < 5; i++)
@@ -482,6 +486,55 @@ test_striteri(const MunitParameter params[], void* data) {
 	return MUNIT_OK;
 }
 
+static MunitResult
+test_putchar_fd(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+	
+	int fd = open("testfile", O_RDWR | O_CREAT, 0777);
+	ft_putchar_fd('a', fd);
+	lseek(fd, SEEK_SET, 0);
+	char s[50] = {0}; read(fd, s, 2);
+	munit_assert_char(s[0], ==, 'a');
+	unlink("./testfile");
+	
+	fd = open("testfile", O_RDWR | O_CREAT, 0777);
+	ft_putchar_fd('~', fd);
+	lseek(fd, SEEK_SET, 0); read(fd, s, 2);
+	munit_assert_char(s[0], ==, '~');
+	unlink("./testfile");
+	return MUNIT_OK;
+}
+
+static MunitResult
+test_putstr_fd(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+	
+	int fd = open("testfile", O_RDWR | O_CREAT, 0777);
+	ft_putstr_fd("string", fd);
+	lseek(fd, SEEK_SET, 0);
+	char s[50] = {0}; read(fd, s, 7);
+	int i = 0; while (i <= 7)
+		munit_logf(MUNIT_LOG_INFO, "%c", s[i++]);
+	munit_assert_true(!strcmp(s, "string"));
+	unlink("./testfile");
+	
+	return MUNIT_OK;
+}
+
+static MunitResult
+test_lstnew(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+	
+	t_list *l = ft_lstnew((void*)100);
+	munit_assert_ptr_equal(l->content, (void*)100);
+	munit_assert_ptr_equal(l->next, 0);
+	free(l);
+	return MUNIT_OK;
+}
+
 static	MunitTest test_suite_tests[] = {
 	{"/ft_isalpha", test_isalpha, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_isdigit", test_isdigit, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
@@ -513,6 +566,9 @@ static	MunitTest test_suite_tests[] = {
 	{"/ft_itoa", test_itoa, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_strmapi", test_strmapi, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/ft_striteri", test_striteri, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_putchar_fd", test_putchar_fd, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_putstr_fd", test_putstr_fd, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/ft_lstnew", test_lstnew, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
