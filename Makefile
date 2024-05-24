@@ -1,7 +1,8 @@
 NAME=hello
 EXT=.out
 MUNIT=munit.h munit.c
-SRCS=$(shell find -name '*.c' ! -name "hello.c")
+SRC_LIB=test_libft.c
+SRC_PNL=get_next_line.c get_next_line_utils.c
 CC=cc
 CFLAGS=-Wall -Wextra -Werror
 RM=rm -rf
@@ -16,7 +17,10 @@ lib-b:
 	$(MAKE) -C $(LIBFT_PATH) bonus
 	
 test-lib: $(MUNIT) lib-b
-	$(CC) $(CFLAGS) $(SRCS) $(LIB) -o $@$(EXT)
+	$(CC) $(CFLAGS) $(SRC_LIB) $(LIB) -o $@$(EXT)
+
+test-pnl: $(MUNIT)
+	$(CC) $(CFLAGS) $(SRC_PNL)
 	
 clean:
 	$(RM) *$(EXT)
