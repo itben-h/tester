@@ -20,45 +20,25 @@ size_t	findi(char *s, char c)
 	return (i);
 }
 
-char	*trim_b_nl(char *buf, size_t n)
+char	*ft_calloc(size_t nmemb, size_t size)
 {
-	char	*s;
+	char	*tab;
 	size_t	i;
-	size_t	j;
 	size_t	len;
 
-	len = findi(buf + n, '\0');
-	s = (char *)malloc(len * sizeof(char));
-	if (!s)
+	if (size && nmemb > 4294967295 / size)
 		return (0);
-	i = n + 1;
-	j = 0;
-	while (buf[i])
-	{
-		s[j] = buf[i];
-		i++;
-		j++;
-	}
-	s[j] = '\0';
-	return (s);
-}
-
-char	*trim_a_nl(char *buf, size_t n)
-{
-	char	*s;
-	size_t	i;
-	
-	s = (char *)malloc((n + 2) * sizeof(char));
-	if (!s)
+	len = nmemb * size;
+	tab = (char *)malloc(len);
+	if (!tab)
 		return (0);
 	i = 0;
-	while (i <= n)
+	while (i < len)
 	{
-		s[i] = buf[i];
+		tab[i] = '\0';
 		i++;
 	}
-	s[i] = '\0';
-	return (s);
+	return (tab);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -82,50 +62,82 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (new);
 }
 
-char	*alloc_mem(char *buf, char *mem)
+char	*ft_realloc(char *line, char *buf)
 {
-	char	*add;
+	char	*tmp;
 	
-	add = trim_b_nl(buf, findi(buf, '\n') + 1);
-	mem = ft_strjoin(mem, add);
-	return (mem);
+	tmp = ft_strjoin(line, buf);
+	free(line);
+	return (tmp);
 }
 
-char	*alloc_line(char* line, char *buf, char *mem)
+char	*copy_buf(char *buf)
 {
-	if (mem && !line[0])
+	char	*s;
+	size_t	i;
+	size_t	n;
+	
+	n = findi(buf, '\n');
+	s = ft_calloc(n + 2, sizeof(char));
+	if (!s)
+		return (0);
+	i = 0;
+	while (i <= n)
 	{
-		if (findi(mem, '\n') != findi(mem, '\0'))
-			line = ft_strjoin(line, trim_a_nl(mem, findi(mem, '\n')));
-		else
-			line = ft_strjoin(line, mem);
+		s[i] = buf[i];
+		i++;
 	}
-	if (findi(buf, '\n') != findi(buf, '\0'))
-		buf = trim_a_nl(buf, findi(buf, '\n'));
-	if (buf)
-		line = ft_strjoin(line, buf);
-	return (line);
+	if (!s[i -1])
+		s[i - 1] = '\n';
+	s[i] = '\0';
+	return (s);
+}
+
+char	*set_buf(char *line, char *buf, size_t buf_i)
+{
+	char	*s;
+	size_t	i;
+	size_t	len;
+
+	len = buf_i - findi(line, '\0');
+	s = ft_calloc(len, sizeof(char));
+	if (!s)
+		return (0);
+	i = 0;
+	while (buf[buf_i - len])
+	{
+		s[i] = buf[buf_i - len];
+		i++;
+		len--;
+	}
+	s[i] = '\0';
+	free(buf);
+	return (s);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*buf;
+	ssize_t		bytesread;
+	static char	buf[BUFFER_SIZE + 1];
 
-	line = (char *)malloc(sizeof(char));
-	line[0] = '\0';
-	buf = (char *)malloc(count * (sizeof(char) + 1));
-	if (!buf)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
-	buf[count] = '\0';
-	while (read(fd, buf, count) || mem)
+	bytesread = 1;
+	line = ft_calloc(1, sizeof(char));
+	while (bytesread > 0)
 	{
-		line = alloc_line(line, buf, mem);
-		mem = alloc_mem(buf, mem);
-		if (line[findi(line, '\0') - 1] == '\n')
+		bytesread = read(fd, buf, BUFFER_SIZE);
+		if (bytesread == -1)
+		{
+			buf = NULL;
+			return (NULL);
+		}
+		buf[bytesread] = '\0';
+		line = ft_realloc(line, buf);
+		if (findi(buf, '\n') != findi(buf, '\0'))
 			break ;
 	}
-	free(buf);
 	return (line);
 }
 
