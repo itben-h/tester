@@ -10,7 +10,7 @@
 # define BUFFER_SIZE 100
 #endif
 
-size_t	findi(char *s, char c)
+size_t	ft_strchr(char *s, char c)
 {
 	size_t	i;
 
@@ -41,7 +41,7 @@ char	*ft_calloc(size_t nmemb, size_t size)
 	return (tab);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *buf, char *res)
 {
 	char	*new;
 	size_t	i;
@@ -50,34 +50,27 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = -1;
 	j = -1;
-	len_total = findi(s1, '\0') + findi(s1, '\0');
+	if (!buf)
+		buf = ft_calloc(1, sizeof(char));
+	len_total = ft_strchr(buf, '\0') + ft_strchr(res, '\0');
 	new = (char *)malloc((len_total + 1) * sizeof(char));
 	if (!new)
 		return (0);
-	while (s1[++i])
-		new[i] = s1[i];
-	while (s2[++j])
-		new[i + j] = s2[j];
+	while (buf[++i])
+		new[i] = buf[i];
+	while (res[++j])
+		new[i + j] = res[j];
 	new[i + j] = '\0';
 	return (new);
 }
 
-char	*ft_realloc(char *line, char *buf)
-{
-	char	*tmp;
-	
-	tmp = ft_strjoin(line, buf);
-	free(line);
-	return (tmp);
-}
-
-char	*copy_buf(char *buf)
+char	*trim_a_nl(char *buf)
 {
 	char	*s;
 	size_t	i;
 	size_t	n;
-	
-	n = findi(buf, '\n');
+
+	n = ft_strchr(buf, '\n');
 	s = ft_calloc(n + 2, sizeof(char));
 	if (!s)
 		return (0);
@@ -87,63 +80,78 @@ char	*copy_buf(char *buf)
 		s[i] = buf[i];
 		i++;
 	}
-	if (!s[i -1])
-		s[i - 1] = '\n';
 	s[i] = '\0';
 	return (s);
 }
 
-char	*set_buf(char *line, char *buf, size_t buf_i)
+char	*trim_b_nl(char *buf)
 {
 	char	*s;
 	size_t	i;
+	size_t	n;
 	size_t	len;
 
-	len = buf_i - findi(line, '\0');
+	n = ft_strchr(buf, '\n');
+	len = ft_strchr(buf, '\0') - n;
 	s = ft_calloc(len, sizeof(char));
 	if (!s)
 		return (0);
 	i = 0;
-	while (buf[buf_i - len])
+	n += 1;
+	while (buf[n])
 	{
-		s[i] = buf[buf_i - len];
+		s[i] = buf[n];
 		i++;
-		len--;
+		n++;
 	}
 	s[i] = '\0';
 	free(buf);
 	return (s);
 }
 
+char	*free_all(char *res, char *buf)
+{
+	free(res);
+	free(buf);
+	buf = NULL;
+	return (buf);
+}
+
 char	*get_next_line(int fd)
 {
-	char		*line;
+	char		*res;
 	ssize_t		bytesread;
-	static char	buf[BUFFER_SIZE + 1];
+	static char	*buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
-	bytesread = 1;
-	line = ft_calloc(1, sizeof(char));
-	while (bytesread > 0)
+	res = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!res)
+		return (0);
+	while (bytesread > 0 && (ft_strchr(res, '\n') == ft_strchr(res, '\0')))
 	{
-		bytesread = read(fd, buf, BUFFER_SIZE);
+		bytesread = read(fd, res, BUFFER_SIZE);
 		if (bytesread == -1)
 		{
-			buf = NULL;
-			return (NULL);
+			buf = free_all(res, buf);
+			return (0);
 		}
-		buf[bytesread] = '\0';
-		line = ft_realloc(line, buf);
-		if (findi(buf, '\n') != findi(buf, '\0'))
-			break ;
+		buf = ft_strjoin(buf, res);
 	}
-	return (line);
+	free(res);
+	res = trim_a_nl(buf);
+	buf = trim_b_nl(buf);
+	return (res);
 }
 
 int main()
 {
 	int fd = open("./test1", O_RDWR);
-	char *s = get_next_line(fd);
-	s = get_next_line(fd);
+	char *s = malloc(sizeof(char));
+	while (s != NULL)
+	{
+		free(s);
+		s = get_next_line(fd);
+		printf("%s", s);
+	}
 }
