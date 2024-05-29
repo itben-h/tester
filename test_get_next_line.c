@@ -15,19 +15,11 @@ test_oneLine(const MunitParameter params[], void* data) {
 	
 	char *s = get_next_line(fd);
 	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
-	munit_assert_string_equal(s, "this is a sentence that should be getted\n");
+	munit_assert_string_equal(s, "01234567890123456789012345678901234567890");
 	
 	s = get_next_line(fd);
-	munit_assert_string_equal(s, "do not get this sentence\n");
 	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
-	
-	s = get_next_line(fd);
-	munit_assert_string_equal(s, "nothing\n");
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
-	
-	s = get_next_line(fd);
-	munit_assert_string_equal(s, "");
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_assert_null(s);
 	
 	close(fd);
 	return MUNIT_OK;

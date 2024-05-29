@@ -2,6 +2,6 @@
 
 ### For testing: 
 
-- Place the 'tests' folder into the required project folder
-- Run the Makefile with the command 'test'
-- Works??
+- Place this folder in the same parent directory as your project
+- Run the Makefile with the command "test-<project>"
+- Does something!
