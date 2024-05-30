@@ -12,32 +12,40 @@ H_GNL=$(addprefix $(PATH_GNL), \
 TEST_GNL=test_get_next_line.c
 GNL_D=-D BUFFER_SIZE=42
 
+TEST_PRINTF=test_printf.c
+
 CC=cc
 CFLAGS=-Wall -Wextra -Werror
 RM=rm -rf
 MKDIR=mkdir -p
+MAKE=make -C
 
 # VVV Directory Stuff VVV
 DIR_BUILD=build/
 INC=-I./$(DIR_BUILD)
 SRC_BUILD=$(shell find $(DIR_BUILD) -name '*.c')
-PATH_LIBFT=../libft/
-PATH_GNL=../get_next_line/
+PATH_LIBFT=	../libft/
+PATH_GNL=	../get_next_line/
+PATH_PRINTF=	../printf/
 
-LIB=-L$(PATH_LIBFT) -lft
-
+LIB=		-L$(PATH_LIBFT) -lft
+LIB_PRINTF=	-L$(PATH_PRINTF) -lft
+	
 lib:
-	$(MAKE) -C $(PATH_LIBFT) all
-	
-lib-b:
-	$(MAKE) -C $(PATH_LIBFT) bonus
-	
-test-lib: $(MUNIT) lib-b
+	$(MAKE) $(PATH_LIBFT) bonus
+
+printf:
+	$(MAKE) $(PATH_PRINTF) bonus
+
+test-lib: $(MUNIT) lib
 	$(CC) $(CFLAGS) $(TEST_LIB) $(LIB) -o $@$(EXT)
 
 test-gnl: $(MUNIT) $(DIR_BUILD)
 	$(shell cp $(SRC_GNL) $(H_GNL) $(MUNIT) $(DIR_BUILD))
-	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL) -g -o $@$(EXT)
+	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL) -o $@$(EXT)
+
+test-printf: $(MUNIT) printf
+	$(CC) $(CFLAGS) $(TEST_PRINTF) $(LIB_PRINTF) -o $@$(EXT)
 
 $(DIR_BUILD): 
 	$(MKDIR) $(DIR_BUILD)	
@@ -51,6 +59,9 @@ fclean: clean
 	@$(RM) $(DIR_BUILD)
 
 fclean-libft: clean
-	$(MAKE) -C $(PATH_LIBFT) fclean
+	$(MAKE) $(PATH_LIBFT) fclean
+
+fclean-printf: clean
+	$(MAKE) $(PATH_PRINTF) fclean
 	
 .PHONY.: all test clean fclean-libft compile
