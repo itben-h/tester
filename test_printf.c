@@ -6,14 +6,14 @@
 #include "munit.h"
 #include "../printf/ft_printf.h"
 
-char	*capture_stdout(
+int	pipefd[2];
+int	saved_stdout = -1;
 
 static void
 test_setup(const MunitParameter params[], void* user_data) {
   	(void) params;
+  	(void) user_data;
 
-  	origin_buf = NULL;
-	user_buf = NULL;
 	saved_stdout = dup(fileno(stdout));
 	dup2(pipefd[1], fileno(stdout));
 }
@@ -21,6 +21,7 @@ test_setup(const MunitParameter params[], void* user_data) {
 static void
 test_teardown(const MunitParameter params[], void* user_data) {
   	(void) params;
+  	(void) user_data;
 
 	dup2(saved_stdout, fileno(stdout));
 	close(saved_stdout);
@@ -31,6 +32,7 @@ test_teardown(const MunitParameter params[], void* user_data) {
 
 char *read_stdout_buf(void)
 {
+	char	buf[256] = {0};
 	fflush(stdout);
 	bzero(buf, 256);
 	int ret = read(pipefd[0], buf, 255);
@@ -44,9 +46,9 @@ test_char(const MunitParameter params[], void* data) {
 	(void) data;
 	
 	ft_printf("%c", 'c');
-	u_buf = read_stdout_buf();
+	char	*u_buf = read_stdout_buf();
 	printf("%c", 'c');
-	o_buf = read_stdout_buf();
+	char	*o_buf = read_stdout_buf();
 
 	munit_assert_string_equal(u_buf, o_buf);
 
@@ -54,7 +56,7 @@ test_char(const MunitParameter params[], void* data) {
 }
 
 static	MunitTest test_suite_tests[] = {
-	{"/print one line", test_oneLine, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/print char", test_char, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
