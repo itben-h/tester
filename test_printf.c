@@ -8,31 +8,36 @@
 
 int	pipefd[2];
 int	saved_stdout = -1;
+char	buf[256] = {0};
 
-static void
+static void*
 test_setup(const MunitParameter params[], void* user_data) {
   	(void) params;
   	(void) user_data;
 
 	saved_stdout = dup(fileno(stdout));
 	dup2(pipefd[1], fileno(stdout));
+	
+	long flags = fcntl(pipefd[0], F_GETFL);
+   	flags |= O_NONBLOCK;
+   	fcntl(pipefd[0], F_SETFL, flags);
+   	
+	return (void*) (uintptr_t) 0xdeadbeef;
 }
 
 static void
-test_teardown(const MunitParameter params[], void* user_data) {
-  	(void) params;
-  	(void) user_data;
+test_teardown(void* fixture) {
 
 	dup2(saved_stdout, fileno(stdout));
 	close(saved_stdout);
 	saved_stdout = -1;
 	close(pipefd[0]);
 	close(pipefd[1]);
+	munit_assert_ptr_equal(fixture, (void*)(uintptr_t)0xdeadbeef);
 }
 
 char *read_stdout_buf(void)
 {
-	char	buf[256] = {0};
 	fflush(stdout);
 	bzero(buf, 256);
 	int ret = read(pipefd[0], buf, 255);
@@ -43,13 +48,13 @@ char *read_stdout_buf(void)
 
 static MunitResult
 test_char(const MunitParameter params[], void* data) {
+	(void) params;
 	(void) data;
 	
 	ft_printf("%c", 'c');
-	char	*u_buf = read_stdout_buf();
+	char	*u_buf = strdup(read_stdout_buf());
 	printf("%c", 'c');
-	char	*o_buf = read_stdout_buf();
-
+	char	*o_buf = strdup(read_stdout_buf());
 	munit_assert_string_equal(u_buf, o_buf);
 
 	return MUNIT_OK;
