@@ -51,11 +51,19 @@ test_char(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
 	
-	ft_printf("%c", 'c');
+	int u_count = ft_printf("%c", 'c');
 	char	*u_buf = strdup(read_stdout_buf());
-	printf("%c", 'c');
+	int o_count = printf("%c", 'c');
 	char	*o_buf = strdup(read_stdout_buf());
 	munit_assert_string_equal(u_buf, o_buf);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("hello%c", '~');
+	u_buf = strdup(read_stdout_buf());
+	o_count = printf("hello%c", '~');
+	o_buf = strdup(read_stdout_buf());
+	munit_assert_string_equal(u_buf, o_buf);
+	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
 }
