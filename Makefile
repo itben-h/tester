@@ -46,10 +46,10 @@ test-gnl: $(MUNIT) $(DIR_BUILD)
 	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL) $(GNL_D) -o $@$(EXT)
 
 test-printf: $(MUNIT) printf
-	$(CC) $(CFLAGS) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -o $@$(EXT)
+	$(CC) $(CFLAGS) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -g -o $@$(EXT)
 
 test-printf-a: printf
-	$(CC) $(CFLAGS) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -o $@$(EXT)
+	$(CC) $(CFLAGS) test_printf_main.c $(LIB_PRINTF) -o $@$(EXT)
 
 $(DIR_BUILD): 
 	$(MKDIR) $(DIR_BUILD)	
