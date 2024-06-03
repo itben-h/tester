@@ -22,7 +22,7 @@ TEST_GNL_B=test_get_next_line_b.c
 ifdef BUF
 GNL_D=-D BUFFER_SIZE=$(BUF)
 else
-GNL_D=-D BUFFER_SIZE=42
+GNL_D=-D BUFFER_SIZE=1
 endif
 
 ## ~~ ft_printf ~~ ##
@@ -68,7 +68,7 @@ test-printf: $(MUNIT) printf
 	$(CC) $(CFLAGS) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -g -o $@$(EXT)
 
 test-printf-a: printf
-	$(CC) $(CFLAGS) test_printf_main.c $(LIB_PRINTF) -o $@$(EXT)
+	$(CC) $(CFLAGS) test_printf_main.c $(LIB_PRINTF) -g -o $@$(EXT)
 
 $(DIR_BUILD): 
 	$(MKDIR) $(DIR_BUILD)	

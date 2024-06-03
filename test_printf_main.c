@@ -8,4 +8,5 @@
 int main()
 {
 	ft_printf("%d", INT_MIN);
+	printf("%d", INT_MIN);
 }
