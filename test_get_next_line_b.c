@@ -16,39 +16,39 @@ test_print3files(const MunitParameter params[], void* data) {
 	int fd3 = open("./gnl_txt/testb3", O_RDWR);
 	
 	char *s = get_next_line(fd1);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b1: %s", s);
 	munit_assert_string_equal(s, "this is b1 first line\n");
 	
 	s = get_next_line(fd2);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b2: %s", s);
 	munit_assert_string_equal(s, "first line this is b2\n");
 	
 	s = get_next_line(fd3);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b3: %s", s);
 	munit_assert_string_equal(s, "line first b3 this is\n");
 	
 	s = get_next_line(fd1);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b1: %s", s);
 	munit_assert_string_equal(s, "b1 second line");
 	
 	s = get_next_line(fd2);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b2: %s", s);
 	munit_assert_string_equal(s, "second line b2");
 	
 	s = get_next_line(fd3);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b3: %s", s);
 	munit_assert_string_equal(s, "line second b3");
 	
 	s = get_next_line(fd1);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b1: %s", s);
 	munit_assert_null(s);
 	
 	s = get_next_line(fd2);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b2: %s", s);
 	munit_assert_null(s);
 	
 	s = get_next_line(fd3);
-	munit_logf(MUNIT_LOG_INFO, "next line: %s", s);
+	munit_logf(MUNIT_LOG_INFO, "next line b3: %s", s);
 	munit_assert_null(s);
 	
 	close(fd1); close(fd2); close(fd3);

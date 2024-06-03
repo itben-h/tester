@@ -7,7 +7,7 @@
 #include <fcntl.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 39
+# define BUFFER_SIZE 1
 #endif
 
 size_t	ft_strchr(char *s, char c)
@@ -127,51 +127,69 @@ char	*trim_b_nl(char *buf)
 	return (s);
 }
 
-char	*free_all(char *res, char *buf)
+void	free_null(char *buf)
 {
-	free(res);
 	free(buf);
 	buf = NULL;
+}
+
+char	*read_file(int fd, char *buf, char *buf_r)
+{
+	char	*tmp;
+	ssize_t	bytesread;
+
+	bytesread = 1;
+	while (bytesread > 0 && (ft_strchr(buf_r, '\n') == ft_strchr(buf_r, '\0')))
+	{
+		bytesread = read(fd, buf_r, BUFFER_SIZE);
+		if (bytesread == -1)
+		{
+			free_null(buf);
+			free_null(buf_r);
+			return (0);
+		}
+		buf_r[bytesread] = '\0';
+		tmp = ft_strjoin(buf, buf_r);
+		free_null(buf);
+		buf = tmp;
+	}
+	free_null(buf_r);
 	return (buf);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*res;
-	ssize_t		bytesread;
-	static char	*buf;
+	char		*buf_r;
+	static char	*buf[FD_SETSIZE + 1];
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || fd > FD_SETSIZE || BUFFER_SIZE <= 0)
 		return (0);
-	bytesread = 1;
-	res = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!res)
+	buf_r = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!buf_r)
 		return (0);
-	while (bytesread > 0 && (ft_strchr(res, '\n') == ft_strchr(res, '\0')))
+	if (!buf[fd])
+		buf[fd] = ft_calloc(1, sizeof(char));
+	buf[fd] = read_file(fd, buf[fd], buf_r);
+	if (!buf[fd])
 	{
-		bytesread = read(fd, res, BUFFER_SIZE);
-		if (bytesread == -1)
-		{
-			buf = free_all(res, buf);
-			return (0);
-		}
-		res[bytesread] = '\0';
-		buf = ft_strjoin(buf, res);
+		free_null(buf_r);
+		free_null(buf[fd]);
+		return (0);
 	}
-	free(res);
-	res = trim_a_nl(buf);
-	buf = trim_b_nl(buf);
+	res = trim_a_nl(buf[fd]);
+	buf[fd] = trim_b_nl(buf[fd]);
 	return (res);
 }
 
 int main()
 {
-	int fd = open("./test1", O_RDWR);
 	char *s = malloc(sizeof(char));
 	while (s != NULL)
 	{
 		free(s);
-		s = get_next_line(fd);
+		s = get_next_line(42);
 		printf("%s", s);
 	}
+	free(s);
 }

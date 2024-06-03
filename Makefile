@@ -40,7 +40,7 @@ DIR_BUILD=build/
 INC=-I./$(DIR_BUILD)
 SRC_BUILD=$(shell find $(DIR_BUILD) -name '*.c')
 PATH_LIBFT=	../libft/
-PATH_GNL=	../get_next_line/
+PATH_GNL=	../gnl/
 PATH_PRINTF=	../printf/
 
 LIB=		-L$(PATH_LIBFT) -lft
