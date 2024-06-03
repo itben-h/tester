@@ -169,8 +169,8 @@ test_ptr(const MunitParameter params[], void* data) {
 	int o_count = printf("%p\n", &i);
 	munit_assert_int(u_count, ==, o_count);
 	
-	u_count = ft_printf("1%p\n2%p\n3%p\n", &j, &c, &s);
-	o_count = printf("1%p2%p3%p\n", &j, &c, &s);
+	u_count = ft_printf("1 %p\n2 %p\n3 %p\n", &j, &c, &s);
+	o_count = printf("1 %p\n2 %p\n3 %p\n", &j, &c, &s);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
