@@ -7,6 +7,9 @@
 
 int main()
 {
-	ft_printf("%d", INT_MIN);
-	printf("%d", INT_MIN);
+	ft_printf("%x", INT_MAX);
+	printf("|");
+	printf("\n");
+	printf("%++.20x", INT_MAX);
+	printf("|");
 }

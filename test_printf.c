@@ -176,6 +176,19 @@ test_ptr(const MunitParameter params[], void* data) {
 	return MUNIT_OK;
 }
 
+static MunitResult
+test_mix(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+	
+	printf("\n");
+	int u_count = ft_printf("%%%%%d%%%%%%%ssss%Xx%x%u%%sss%%%%%%%c%s %p %%\n", 2, "string", 400, 200, UINT_MAX - 1, 'a', "///", "yes" );
+	int o_count = printf("%%%%%d%%%%%%%ssss%Xx%x%u%%sss%%%%%%%c%s %p %%\n", 2, "string", 400, 200, UINT_MAX - 1, 'a', "///", "yes" );
+	munit_assert_int(u_count, ==, o_count);
+
+	return MUNIT_OK;
+}
+
 static	MunitTest test_suite_tests[] = {
 	{"/print char", test_char, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print str", test_str, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -184,6 +197,7 @@ static	MunitTest test_suite_tests[] = {
 	{"/print percent", test_percent, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print hexa", test_hexa, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print ptr", test_ptr, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/print mix", test_mix, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
