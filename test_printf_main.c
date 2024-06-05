@@ -7,9 +7,11 @@
 
 int main()
 {
-	ft_printf("%x", INT_MAX);
+	int i; int j;
+	i = ft_printf("%9s", "string");
 	printf("|");
 	printf("\n");
-	printf("%++.20x", INT_MAX);
+	j = printf("%-9.10s", "string");
 	printf("|");
+	printf("\n%d %d", i, j);
 }
