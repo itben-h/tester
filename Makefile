@@ -28,6 +28,12 @@ endif
 ## ~~ ft_printf ~~ ##
 TEST_PRINTF=test_printf.c
 
+ifdef GG
+TEST_PRINTF_B=test_printf-bb.c
+else
+TEST_PRINTF_B=$(CFLAGS) test_printf-b.c
+endif
+
 # --- Command Shortcuts --- #
 CC=cc
 CFLAGS=-Wall -Wextra -Werror
@@ -65,13 +71,16 @@ test-gnl-b: $(MUNIT) $(DIR_BUILD)
 	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL_B) $(GNL_D) -o $@$(EXT)
 
 test-printf: $(MUNIT) printf
-	$(CC) $(CFLAGS) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -g -o $@$(EXT)
+	$(CC) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -g -o $@$(EXT)
 
 test-printf-a: printf
-	$(CC) $(CFLAGS) test_printf_main.c $(LIB_PRINTF) -g -o $@$(EXT)
-
+	$(CC) test_printf_main.c $(LIB_PRINTF) -g -o $@$(EXT)
+	
+test-printf-b: $(MUNIT) printf
+	$(CC) $(TEST_PRINTF_B) munit.c $(LIB_PRINTF) -g -o $@$(EXT)
+	
 $(DIR_BUILD): 
-	$(MKDIR) $(DIR_BUILD)	
+	$(MKDIR) $(DIR_BUILD)
 
 clean:
 	@echo removing .out ...

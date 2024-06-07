@@ -17,11 +17,11 @@ test_setup(const MunitParameter params[], void* user_data) {
 
 	saved_stdout = dup(fileno(stdout));
 	dup2(pipefd[1], fileno(stdout));
-	
+
 	long flags = fcntl(pipefd[0], F_GETFL);
    	flags |= O_NONBLOCK;
    	fcntl(pipefd[0], F_SETFL, flags);
-   	
+
 	return (void*) (uintptr_t) 0xdeadbeef;
 }
 
@@ -50,20 +50,13 @@ static MunitResult
 test_char(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	printf("\n");
-	int u_count = ft_printf("%c\n", 'c');
-	int o_count = printf("%c\n", 'c');
+
+	int u_count = ft_printf("\n%- 09.20c", '1'); ft_print("|");
+	int o_count = printf("\n%- 09.20c", '1'); ft_print("|");
 	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("hello%c\n", '~');
-	o_count = printf("hello%c\n", '~');
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("?%c?%c?%c\n", 'a', '1', '0');
-	o_count = printf("?%c?%c?%c\n", 'a', '1', '0');
-	munit_assert_int(u_count, ==, o_count);
-	
+
 	return MUNIT_OK;
 }
 
@@ -71,19 +64,13 @@ static MunitResult
 test_str(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
+	char *s = "string";
+
 	printf("\n");
-	int u_count = ft_printf("%s\n", "string");
-	int o_count = printf("%s\n", "string");
-	munit_assert_int(u_count, ==, o_count);
-	
-	char str[] = "this is a ";
-	u_count = ft_printf("%sstring\n", str);
-	o_count = printf("%sstring\n", str);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%s\n", NULL);
-	o_count = printf("%s\n", NULL);
+
+	int u_count = ft_printf("%-0 10.4s|\n", s);
+	int o_count = printf("%-0 10.4s|\n", s);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
@@ -93,18 +80,24 @@ static MunitResult
 test_int(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	printf("\n");
-	int u_count = ft_printf("%i\n", 100);
-	int o_count = printf("%d\n", 100);
+	int i = munit_rand_int_range(INT_MIN, INT_MAX);
+
+	int u_count = ft_printf("%-0 +9.3i|\n", i);
+	int o_count = printf("%-0 +9.3d|\n", i);
 	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%i\n", INT_MAX);
-	o_count = printf("%d\n", INT_MAX);
+
+	u_count = ft_printf("%-09.3i|\n", i);
+	o_count = printf("%-09.3d|\n", i);
 	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%i\n", INT_MIN);
-	o_count = printf("%d\n", INT_MIN);
+
+	u_count = ft_printf("%-02.3i|\n", i);
+	o_count = printf("%-02.3d|\n", i);
+	munit_assert_int(u_count, ==, o_count);
+
+	u_count = ft_printf("%0-+ 2.6i|\n", i);
+	o_count = printf("%0-+ 2.6d|\n", i);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
@@ -114,7 +107,7 @@ static MunitResult
 test_uint(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	printf("\n");
 	int u_count = ft_printf("%u\n", 0);
 	int o_count = printf("%u\n", 0);
@@ -123,7 +116,7 @@ test_uint(const MunitParameter params[], void* data) {
 	u_count = ft_printf("%u\n", 10010);
 	o_count = printf("%u\n", 10010);
 	munit_assert_int(u_count, ==, o_count);
-	
+
 	u_count = ft_printf("%u\n", UINT_MAX);
 	o_count = printf("%u\n", UINT_MAX);
 	munit_assert_int(u_count, ==, o_count);
@@ -135,12 +128,12 @@ static MunitResult
 test_percent(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	printf("\n");
 	int u_count = ft_printf("%%\n");
 	int o_count = printf("%%\n");
 	munit_assert_int(u_count, ==, o_count);
-	
+
 	u_count = ft_printf("%s%%ha\n", "ha");
 	o_count = printf("%s%%ha\n", "ha");
 	munit_assert_int(u_count, ==, o_count);
@@ -152,12 +145,12 @@ static MunitResult
 test_hexa(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	printf("\n");
 	int u_count = ft_printf("%x\n", 123456);
 	int o_count = printf("%x\n", 123456);
 	munit_assert_int(u_count, ==, o_count);
-	
+
 	u_count = ft_printf("test%x%Xtest\n", 42, 6666);
 	o_count = printf("test%x%Xtest\n", 42, 6666);
 	munit_assert_int(u_count, ==, o_count);
@@ -169,48 +162,29 @@ static MunitResult
 test_ptr(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	int i = 1; int j = 42; char c = 'x'; char *s = "ghhhhh";
-	
+
 	printf("\n");
 	int u_count = ft_printf("%p\n", &i);
 	int o_count = printf("%p\n", &i);
 	munit_assert_int(u_count, ==, o_count);
-	
+
 	u_count = ft_printf("1 %p\n2 %p\n3 %p\n", &j, &c, &s);
 	o_count = printf("1 %p\n2 %p\n3 %p\n", &j, &c, &s);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%p\n", NULL);
-	o_count = printf("%p\n", NULL);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
 }
 
 static MunitResult
-test_stress(const MunitParameter params[], void* data) {
+test_mix(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
-	
+
 	printf("\n");
 	int u_count = ft_printf("%%%%%d%%%%%%%ssss%Xx%x%u%%sss%%%%%%%c%s %p %%\n", 2, "string", 400, 200, UINT_MAX - 1, 'a', "///", "yes" );
 	int o_count = printf("%%%%%d%%%%%%%ssss%Xx%x%u%%sss%%%%%%%c%s %p %%\n", 2, "string", 400, 200, UINT_MAX - 1, 'a', "///", "yes" );
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%z");
-	o_count = printf("%z");
-	printf("%d %d\n", u_count, o_count);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%");
-	o_count = printf("%");
-	printf("%d %d\n", u_count, o_count);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%d %", 42);
-	o_count = printf("%d %", 42);
-	printf("%d %d", u_count, o_count);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
@@ -224,7 +198,7 @@ static	MunitTest test_suite_tests[] = {
 	{"/print percent", test_percent, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print hexa", test_hexa, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print ptr", test_ptr, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
-	{"/print stress", test_stress, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/print mix", test_mix, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
