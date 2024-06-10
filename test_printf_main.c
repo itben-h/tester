@@ -8,10 +8,10 @@
 int main()
 {
 	int i; int j;
-	i = ft_printf("%+2i", 1);
+	i = ft_printf("% %d", 42);
 	printf("|");
 	printf("\n");
-	j = printf("%+2i", 1);
+	j = printf("% %d", 42);
 	printf("|");
 	printf("\n%d %d", i, j);
 }

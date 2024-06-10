@@ -29,7 +29,7 @@ endif
 TEST_PRINTF=test_printf.c
 
 ifdef GG
-TEST_PRINTF_B=test_printf-bb.c
+TEST_PRINTF_B=test_printf-bb.c -w
 else
 TEST_PRINTF_B=$(CFLAGS) test_printf-b.c
 endif
