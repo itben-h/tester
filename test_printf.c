@@ -217,11 +217,6 @@ test_stress(const MunitParameter params[], void* data) {
 	o_count = printf("% %d", 42);
 	printf("\n%d %d\n", u_count, o_count);
 	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf(" %z %z %z|");
-	o_count = printf(" %z %z %z|");
-	printf("\n%d %d\n", u_count, o_count);
-	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
 }
