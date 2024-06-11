@@ -642,6 +642,35 @@ test_ptr(const MunitParameter params[], void* data) {
 	return MUNIT_OK;
 }
 
+static MunitResult
+test_zeroes(const MunitParameter params[], void* data) {
+	(void) params;
+	(void) data;
+
+	printf("\n");
+	int u_count = ft_printf("%.d|1\n", 0);
+	int o_count = printf("%.d|1\n", 0);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%-4.0i|2\n", 0);
+	o_count = printf("%-4.0i|2\n", 0);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%08.0d|3\n", 0);
+	o_count = printf("%08.0d|3\n", 0);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%#7x|4\n", 0);
+	o_count = printf("%#7x|4\n", 0);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%#-4x|5\n", 0);
+	o_count = printf("%#-4x|5\n", 0);
+	munit_assert_int(u_count, ==, o_count);
+
+	return MUNIT_OK;
+}
+
 static	MunitTest test_suite_tests[] = {
 	{"/print char", test_char, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print str", test_str, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -652,6 +681,7 @@ static	MunitTest test_suite_tests[] = {
 	{"/print hexa_x", test_hexa_x, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print hexa_X", test_hexa_X, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print ptr", test_ptr, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/print zeroes", test_zeroes, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
