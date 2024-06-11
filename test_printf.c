@@ -82,8 +82,8 @@ test_str(const MunitParameter params[], void* data) {
 	o_count = printf("%sstring\n", str);
 	munit_assert_int(u_count, ==, o_count);
 	
-	u_count = ft_printf("%s\n", NULL);
-	o_count = printf("%s\n", NULL);
+	u_count = ft_printf("%s\n", (char*)NULL);
+	o_count = printf("%s\n", (char*)NULL);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;

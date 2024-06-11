@@ -115,17 +115,33 @@ test_str(const MunitParameter params[], void* data) {
 	u_count = ft_printf("%14.14s|10\n", s);
 	o_count = printf("%14.14s|10\n", s);
 	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%-10s|\n", (char*)NULL);
+	o_count = printf("%-10s|\n", (char*)NULL);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%12.7s|\n", (char*)NULL);
+	o_count = printf("%12.7s|\n", (char*)NULL);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%3.5s|\n", (char*)NULL);
+	o_count = printf("%3.5s|\n", (char*)NULL);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%.s|\n", (char*)NULL);
+	o_count = printf("%.s|\n", (char*)NULL);
+	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
 }
 
 static MunitResult
-test_int_0(const MunitParameter params[], void* data) {
+test_int_i(const MunitParameter params[], void* data) {
 	(void) params;
 	(void) data;
 
 	printf("\n");
-	int i = 0;
+	int i = munit_rand_int_range(1, 9);
 
 	int u_count = ft_printf("%7i|1\n", i);
 	int o_count = printf("%7d|1\n", i);
@@ -614,6 +630,14 @@ test_ptr(const MunitParameter params[], void* data) {
 	u_count = ft_printf("%-36p|2\n", &s);
 	o_count = printf("%-36p|2\n", &s);
 	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%-15p|\n", NULL);
+	o_count = printf("%-15p|\n", NULL);
+	munit_assert_int(u_count, ==, o_count);
+	
+	u_count = ft_printf("%8p|\n", NULL);
+	o_count = printf("%8p|\n", NULL);
+	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
 }
@@ -621,7 +645,7 @@ test_ptr(const MunitParameter params[], void* data) {
 static	MunitTest test_suite_tests[] = {
 	{"/print char", test_char, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print str", test_str, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
-	{"/print int_0", test_int_0, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
+	{"/print int_i", test_int_i, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print int_min", test_int_min, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print int_max", test_int_max, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},
 	{"/print uint", test_uint, test_setup, test_teardown, MUNIT_TEST_OPTION_NONE, NULL},

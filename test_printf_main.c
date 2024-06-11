@@ -8,10 +8,10 @@
 int main()
 {
 	int i; int j;
-	i = ft_printf("%d%d%d%d%d%d", 1, 2,3,4,5,6);
+	i = ft_printf("% x", 12345);
 	printf("|");
 	printf("\n");
-	j = printf("%d%d%d%d%d%d", 1, 2,3,4,5,6);
+	j = printf("% x", 12345);
 	printf("|");
 	printf("\n%d %d", i, j);
 }

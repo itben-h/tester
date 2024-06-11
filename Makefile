@@ -64,7 +64,7 @@ test-lib: $(MUNIT) lib
 
 test-gnl: $(MUNIT) $(DIR_BUILD)
 	$(shell cp $(SRC_GNL) $(H_GNL) $(MUNIT) $(DIR_BUILD))
-	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL) $(GNL_D) -o $@$(EXT)
+	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL) $(GNL_D) -g -o $@$(EXT)
 	
 test-gnl-b: $(MUNIT) $(DIR_BUILD)
 	$(shell cp $(SRC_GNL_B) $(H_GNL_B) $(MUNIT) $(DIR_BUILD))

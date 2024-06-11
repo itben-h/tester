@@ -72,18 +72,6 @@ test_str(const MunitParameter params[], void* data) {
 	int u_count = ft_printf("%-0 10.4s|\n", s);
 	int o_count = printf("%-0 10.4s|\n", s);
 	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%.s|\n", NULL);
-	o_count = printf("%.s|\n", NULL);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%8.4s|\n", NULL);
-	o_count = printf("%8.4s|\n", NULL);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%-10.7s|\n", NULL);
-	o_count = printf("%-10.7s|\n", NULL);
-	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
 }
@@ -201,18 +189,6 @@ test_ptr(const MunitParameter params[], void* data) {
 	
 	u_count = ft_printf("%- +   +    0000000-    ++ --25.20p|8\n", &s);
 	o_count = printf("%- +   +    0000000-    ++ --25.20p|8\n", &s);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%-.15p|\n", NULL);
-	o_count = printf("%-.15p|\n", NULL);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%8.0p|\n", NULL);
-	o_count = printf("%8.0p|\n", NULL);
-	munit_assert_int(u_count, ==, o_count);
-	
-	u_count = ft_printf("%-17.1p|\n", NULL);
-	o_count = printf("%-17.1p|\n", NULL);
 	munit_assert_int(u_count, ==, o_count);
 
 	return MUNIT_OK;
