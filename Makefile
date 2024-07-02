@@ -54,7 +54,7 @@ LIB_PRINTF=	-L$(PATH_PRINTF) -lftprintf
 
 # --- RULES --- #
 lib:
-	$(MAKE) $(PATH_LIBFT) bonus
+	$(MAKE) $(PATH_LIBFT) all
 
 printf:
 	$(MAKE) $(PATH_PRINTF) bonus
@@ -69,6 +69,9 @@ test-gnl: $(MUNIT) $(DIR_BUILD)
 test-gnl-b: $(MUNIT) $(DIR_BUILD)
 	$(shell cp $(SRC_GNL_B) $(H_GNL_B) $(MUNIT) $(DIR_BUILD))
 	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL_B) $(GNL_D) -o $@$(EXT)
+	
+test-gnl-lib: $(MUNIT) lib
+	$(CC) $(CFLAGS) munit.c $(TEST_GNL) $(LIB) -g -o $@$(EXT)
 
 test-printf: $(MUNIT) printf
 	$(CC) munit.c $(TEST_PRINTF) $(LIB_PRINTF) -g -o $@$(EXT)
