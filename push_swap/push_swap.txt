@@ -1,0 +1,16 @@
+~~~eval related~~~
+
+https://push-swap-visualizer.vercel.app/
+https://tinyurl.com/3hp49k52
+
+https://github.com/o-reo/push_swap_visualizer
+
+ARG=""; ./push_swap $ARG | wc -l
+ARG=$(shuf -i 1-100 | tr '\n' ' '); ./push_swap $ARG | ./checker_linux $ARG
+for i in {1..100}; do ARG=$(shuf -i 1-500 | tr '\n' ' '); ./push_swap $ARG | wc -l ; done
+
+6 3
+2 7 9 1 4 8 5
+
+8 6 5 1
+2 3 4 7 9
