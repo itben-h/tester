@@ -62,6 +62,11 @@ printf "${COLOR_Y}Too few arguments\n${COLOR_END}"
 ./pipex infile "ls -l" "wc -l"
 valgrind --leak-check=full --show-leak-kinds=all -s ./pipex infile "ls -l" "wc -l" 2> output.log; val_check
 
+printf "${COLOR_Y}Empty strings\n${COLOR_END}"
+< ./deepthought.txt wc | > outfile1
+valgrind --leak-check=full -s ./pipex "/dev/urandom" "" "" outfile2 2> output.log; val_check
+printf "${COLOR_G}[OK]\n${COLOR_END}"
+
 printf "${COLOR_Y}Existing folder (without execution permission) entered where first command should be\n${COLOR_END}"
 < infile /dev/urandom | wc -l > outfile1
 valgrind --leak-check=full -s ./pipex infile "/dev/urandom" "wc -l" outfile2 2> output.log; val_check
