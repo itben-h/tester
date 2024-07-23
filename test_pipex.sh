@@ -1,6 +1,9 @@
 #!/bin/bash
 # norminette -R CheckForbiddenSourceHeader CheckDefine
 
+# Put this in the same dir as your pipex
+# Run this script and enjoy!
+
 COLOR_YIB='\033[1;93m'
 COLOR_YI='\033[0;93m'
 COLOR_Y='\033[0;33m'
