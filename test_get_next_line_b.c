@@ -18,26 +18,32 @@ test_print3files(const MunitParameter params[], void* data) {
 	char *s = get_next_line(fd1);
 	munit_logf(MUNIT_LOG_INFO, "next line b1: %s", s);
 	munit_assert_string_equal(s, "this is b1 first line\n");
+	free(s);
 	
 	s = get_next_line(fd2);
 	munit_logf(MUNIT_LOG_INFO, "next line b2: %s", s);
 	munit_assert_string_equal(s, "first line this is b2\n");
+	free(s);
 	
 	s = get_next_line(fd3);
 	munit_logf(MUNIT_LOG_INFO, "next line b3: %s", s);
 	munit_assert_string_equal(s, "line first b3 this is\n");
+	free(s);
 	
 	s = get_next_line(fd1);
 	munit_logf(MUNIT_LOG_INFO, "next line b1: %s", s);
 	munit_assert_string_equal(s, "b1 second line");
+	free(s);
 	
 	s = get_next_line(fd2);
 	munit_logf(MUNIT_LOG_INFO, "next line b2: %s", s);
 	munit_assert_string_equal(s, "second line b2");
+	free(s);
 	
 	s = get_next_line(fd3);
 	munit_logf(MUNIT_LOG_INFO, "next line b3: %s", s);
 	munit_assert_string_equal(s, "line second b3");
+	free(s);
 	
 	s = get_next_line(fd1);
 	munit_logf(MUNIT_LOG_INFO, "next line b1: %s", s);
