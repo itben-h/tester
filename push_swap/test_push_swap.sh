@@ -17,6 +17,7 @@ ARGS_ERROR=(
 	"1 0 2147483649"
 	"7 0 8 -"
 	"54m 76 0 9 "
+	"1 2 3 4 5 6 7 8 9 1"
 )
 
 ARGS=(
@@ -24,12 +25,13 @@ ARGS=(
 	"89 4"
 	# 3 random values
 	"3 2 1"
-	" 0 2 1"
+	"0 2 1"
 	"4 6 2147483647"
 	# 5 random values
 	"1 5 2 4 3  "
 	"10 5 8 7 3"
 	"-13 241 322 49 37"
+	"-0000001 000000002 -00003 001 03"
 	"1 2 3 4 5 6 7 8 9" # already sorted
 	# 10 random values
 	"-21 303 -293 -156 -179 272 -4 354 69 -246"
@@ -49,7 +51,7 @@ echo "-----------------------------------"
 for ARG in "${ARGS_ERROR[@]}"; do
 
 	# Run push_swap and capture the output
-	output=$(./push_swap "$ARG" 2>&1 | tr -d '\0')
+	output=$(valgrind ./push_swap "$ARG" 2>&1 | tr -d '\0')
 
 
 	# Check if the output is equal to "Error"
@@ -72,7 +74,7 @@ echo "-----------------------------------"
 # Iterate over each test argument
 for ARG in "${ARGS[@]}"; do
 	# Run push_swap and pipe the output to checker
-	output=$(./push_swap "$ARG" | ./checker_linux "$ARG")
+	output=$(valgrind ./push_swap "$ARG" | ./checker_linux "$ARG")
 
 	# Count the number of lines printed by checker
 	line_count=$(./push_swap "$ARG" | wc -l)
