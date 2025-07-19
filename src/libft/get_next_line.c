@@ -49,6 +49,7 @@ static void	save_rem(char *s, char *save, size_t nlen)
 	char	*n;
 	size_t	len;
 
+	n = "";
 	if (!s)
 	{
 		ft_bzero(save, BUFFER_SIZE + 1);

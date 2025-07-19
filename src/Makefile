@@ -65,11 +65,11 @@ test-lib: $(MUNIT) lib
 test-gnl: $(MUNIT) $(DIR_BUILD)
 	$(shell cp $(SRC_GNL) $(H_GNL) $(MUNIT) $(DIR_BUILD))
 	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL) $(GNL_D) -g -o $@$(EXT)
-	
+
 test-gnl-b: $(MUNIT) $(DIR_BUILD)
 	$(shell cp $(SRC_GNL_B) $(H_GNL_B) $(MUNIT) $(DIR_BUILD))
 	$(CC) $(CFLAGS) $(SRC_BUILD) $(TEST_GNL_B) $(GNL_D) -o $@$(EXT)
-	
+
 test-gnl-lib: $(MUNIT) lib
 	$(CC) $(CFLAGS) munit.c $(TEST_GNL) $(LIB) -g -o $@$(EXT)
 
@@ -78,11 +78,11 @@ test-printf: $(MUNIT) printf
 
 test-printf-a: printf
 	$(CC) test_printf_main.c $(LIB_PRINTF) -g -o $@$(EXT)
-	
+
 test-printf-b: $(MUNIT) printf
 	$(CC) $(TEST_PRINTF_B) munit.c $(LIB_PRINTF) -g -o $@$(EXT)
-	
-$(DIR_BUILD): 
+
+$(DIR_BUILD):
 	$(MKDIR) $(DIR_BUILD)
 
 clean:
@@ -98,5 +98,5 @@ fclean-libft: clean fclean
 
 fclean-printf: clean fclean
 	$(MAKE) $(PATH_PRINTF) fclean
-	
+
 .PHONY.: all test clean fclean-libft fclean-printf
