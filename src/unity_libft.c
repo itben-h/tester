@@ -104,6 +104,28 @@ void test_bzero() {
 	TEST_ASSERT_EQUAL_STRING(str2, "");
 }
 
+void test_memcpy() {
+	char blank1[5] = "";
+	char blank2[5] = "";
+	char dest1[50] = "Replace Me";
+	char dest2[50] = "Replace Me";
+	char src1[50] = "Get Replaced";
+	char src2[50] = "Get Replaced";
+	int arr1[5] = {1, 2, 3, 4, 5};
+	int arr2[5] = {1, 2, 3, 4, 5};
+	int arr_s[3] = {6, 7, 8};
+
+	void* res = ft_memcpy(blank1, blank1, 3);
+	TEST_ASSERT_EQUAL_PTR(res, blank1);
+	TEST_ASSERT_EQUAL_STR(res, memcpy(blank2, blank2, 3));
+	res = ft_memcpy(dest1, src1, 5);
+	TEST_ASSERT_EQUAL_PTR(res, dest1);
+	TEST_ASSERT_EQUAL_STR(res, memcpy(dest2, src2, 3));
+	ft_memcpy(arr1, arr_s, 2);
+	memcpy(arr2, arr_s, 2);
+	TEST_ASSERT_EQUAL_INT_ARRAY(arr1, arr2, 5);
+}
+
 int main(void) {
 	UNITY_BEGIN();
 	RUN_TEST(test_isalpha);
@@ -113,6 +135,7 @@ int main(void) {
 	RUN_TEST(test_isprint);
 	RUN_TEST(test_strlen);
 	RUN_TEST(test_memset);
+	RUN_TEST(test_memcpy);
 
 	return UNITY_END();
 }

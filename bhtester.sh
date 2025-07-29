@@ -8,17 +8,12 @@ COLOR_END='\033[0m'
 NAME=bhtester
 EXT=.test
 
-# init should only be run directly
 if [ "$1" == 'init' ]; then
-	(return 0 2>/dev/null)
-	if [ $? -eq 0 ]; then
-		alias "$NAME=$(pwd)/$NAME.sh"
-		printf "${COLOR_G}$NAME aliased!${COLOR_END}\n"
-		return 0
-	else
-		printf "${COLOR_R}Please run ./$NAME.sh init in 'source' mode${COLOR_END}\n"
-		exit 1
-	fi
+	BIN_DIR="$HOME/.local/bin"
+	mkdir -p "$BIN_DIR"
+	ln -sf "$(pwd)/$NAME.sh" "$BIN_DIR/$NAME"
+	printf "${COLOR_G}$NAME linked to $BIN_DIR/$NAME!${COLOR_END}\n"
+	exit 0
 fi
 
 CURR_DIR=$(pwd)
