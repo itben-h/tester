@@ -44,8 +44,8 @@ void test_isalnum() {
 void test_isascii() {
 	char yes1 = 0;
 	char yes2 = 31;
-	char no1 = 128;
-	char no2 = 255;
+	unsigned char no1 = 128;
+	unsigned char no2 = 255;
 
 	TEST_ASSERT_TRUE(ft_isascii(yes1));
 	TEST_ASSERT_TRUE(ft_isascii(yes2));
@@ -117,13 +117,46 @@ void test_memcpy() {
 
 	void* res = ft_memcpy(blank1, blank1, 3);
 	TEST_ASSERT_EQUAL_PTR(res, blank1);
-	TEST_ASSERT_EQUAL_STR(res, memcpy(blank2, blank2, 3));
+	TEST_ASSERT_EQUAL_STRING(res, memcpy(blank2, blank2, 3));
 	res = ft_memcpy(dest1, src1, 5);
 	TEST_ASSERT_EQUAL_PTR(res, dest1);
-	TEST_ASSERT_EQUAL_STR(res, memcpy(dest2, src2, 3));
+	TEST_ASSERT_EQUAL_STRING(res, memcpy(dest2, src2, 5));
 	ft_memcpy(arr1, arr_s, 2);
 	memcpy(arr2, arr_s, 2);
 	TEST_ASSERT_EQUAL_INT_ARRAY(arr1, arr2, 5);
+}
+
+void test_memmove() {
+	char blank1[5] = "";
+	char blank2[5] = "";
+	char dest1[50] = "Replace Me";
+	char dest2[50] = "Replace Me";
+	char src1[50] = "Get Replaced";
+	char src2[50] = "Get Replaced";
+	char overlap1[50] = "overlap";
+	char overlap2[50] = "overlap";
+	int arr1[9] = {1, 2, 3, 4, 5};
+	int arr2[9] = {1, 2, 3, 4, 5};
+
+	TEST_ASSERT_EQUAL_STRING(ft_memmove(blank1, blank1, 3), memmove(blank2, blank2, 3));
+	TEST_ASSERT_EQUAL_STRING(ft_memmove(dest1, src1, 5), memmove(dest2, src2, 5));
+	TEST_ASSERT_EQUAL_STRING(ft_memmove(overlap1 + 4, overlap1, 7), memmove(overlap2 + 4, overlap2, 7));
+	TEST_PRINTF("Memmoved String is %s", overlap1);
+	ft_memmove(arr1 + 3, arr1, 4);
+	memmove(arr2 + 3, arr2, 4);
+	TEST_ASSERT_EQUAL_INT_ARRAY(arr1, arr2, 5);
+	TEST_PRINTF("Memmoved elem at Index %d is: %d", 3, arr1[3]);
+}
+
+void test_strlcpy() {
+	char dest[] = "dest";
+	char src[] = "src";
+
+	ft_strlcpy(dest, src, 2);
+	TEST_ASSERT_EQUAL_STRING(dest, "s");
+	ft_strlcpy(dest, src, 4);
+	TEST_ASSERT_EQUAL_STRING(dest, "src");
+	TEST_ASSERT_EQUAL_INT(ft_strlcpy(dest, src, 0), 3);
 }
 
 int main(void) {
@@ -136,6 +169,8 @@ int main(void) {
 	RUN_TEST(test_strlen);
 	RUN_TEST(test_memset);
 	RUN_TEST(test_memcpy);
+	RUN_TEST(test_memmove);
+	RUN_TEST(test_strlcpy);
 
 	return UNITY_END();
 }
