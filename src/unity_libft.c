@@ -409,6 +409,13 @@ void test_putstr_fd() {
 	unlink("./testfile");
 }
 
+void test_lstnew() {
+	t_list *l = ft_lstnew((void*)100);
+	TEST_ASSERT_EQUAL_PTR(l->content, (void*)100);
+	TEST_ASSERT_EQUAL_PTR(l->next, 0);
+	free(l);
+}
+
 int main(void) {
 	UNITY_BEGIN();
 	RUN_TEST(test_isalpha);
@@ -442,6 +449,7 @@ int main(void) {
 	RUN_TEST(test_striteri);
 	RUN_TEST(test_putchar_fd);
 	RUN_TEST(test_putstr_fd);
+	RUN_TEST(test_lstnew);
 
 	return UNITY_END();
 }
