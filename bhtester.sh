@@ -9,11 +9,16 @@ NAME=bhtester
 EXT=.test
 
 if [ "$1" == 'init' ]; then
-	BIN_DIR="$HOME/.local/bin"
-	mkdir -p "$BIN_DIR"
-	ln -sf "$(pwd)/$NAME.sh" "$BIN_DIR/$NAME"
-	printf "${COLOR_G}$NAME linked to $BIN_DIR/$NAME!${COLOR_END}\n"
-	exit 0
+	RC="$HOME/.bashrc"
+	if [ "$SHELL" = "/bin/zsh" ]; then
+		RC="$HOME/.zshrc"
+	fi
+	SCRIPT="$(pwd)/$NAME.sh"
+	if ! grep "bhtester=" "$RC" &> /dev/null; then
+		printf "\nalias bhtester=$SCRIPT\n" >> "$RC"
+	fi
+	echo "Alias added for bhtester! Use it in project dirs!"
+	exec $SHELL
 fi
 
 CURR_DIR=$(pwd)
@@ -53,5 +58,5 @@ if [ -e "$CURR_DIR/libft.h" ]; then
 	make libft
 	./libft"${EXT}"
 else
-	echo nah
+	echo "Have you ran 'bhtester.sh init'?"
 fi
